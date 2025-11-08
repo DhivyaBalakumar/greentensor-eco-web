@@ -26,8 +26,9 @@ const Header = () => {
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className={`transition-all duration-500 ${scrolled ? 'text-3xl' : 'text-5xl'} font-bold gradient-text`}>
-            GT
+          <div className={`transition-all duration-500 ${scrolled ? 'text-3xl' : 'text-5xl'} font-bold flex items-center`}>
+            <span className="text-eco-green">G</span>
+            <span className="text-tech-blue">T</span>
           </div>
         </div>
 
