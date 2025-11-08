@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
-import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -40,7 +39,7 @@ serve(async (req) => {
       throw new Error('Failed to save submission');
     }
 
-    // Send email via SMTP
+    // Send email via SMTP using basic socket connection
     const smtpUser = Deno.env.get('SMTP_USER');
     const smtpPassword = Deno.env.get('SMTP_PASSWORD');
 
@@ -61,52 +60,70 @@ serve(async (req) => {
       smtpPort = 587;
     }
 
-    const client = new SMTPClient({
-      connection: {
-        hostname: smtpHost,
-        port: smtpPort,
-        tls: true,
-        auth: {
-          username: smtpUser,
-          password: smtpPassword,
-        },
-      },
-    });
+    // Create simple email body
+    const emailBody = [
+      `From: ${smtpUser}`,
+      `To: ${smtpUser}`,
+      `Subject: New Contact Form Submission from ${name}`,
+      'MIME-Version: 1.0',
+      'Content-Type: text/html; charset=utf-8',
+      '',
+      `<html><body>`,
+      `<h2>New Contact Form Submission</h2>`,
+      `<p><strong>Name:</strong> ${name}</p>`,
+      `<p><strong>Email:</strong> ${email}</p>`,
+      company ? `<p><strong>Company:</strong> ${company}</p>` : '',
+      `<p><strong>Message:</strong></p>`,
+      `<p>${message.replace(/\n/g, '<br>')}</p>`,
+      `</body></html>`,
+    ].filter(Boolean).join('\r\n');
 
-    await client.send({
-      from: smtpUser,
-      to: smtpUser, // Send to your own email
-      subject: `New Contact Form Submission from ${name}`,
-      html: `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-</head>
-<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5;">
-  <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-    <div style="background: linear-gradient(135deg, #22c55e 0%, #10b981 100%); padding: 30px; text-align: center;">
-      <h2 style="color: #ffffff; margin: 0;">New Contact Form Submission</h2>
-    </div>
-    <div style="padding: 30px;">
-      <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-        <p style="margin: 10px 0;"><strong>Name:</strong> ${name}</p>
-        <p style="margin: 10px 0;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #22c55e;">${email}</a></p>
-        ${company ? `<p style="margin: 10px 0;"><strong>Company:</strong> ${company}</p>` : ''}
-      </div>
-      <div style="background: #ffffff; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-        <h3 style="margin-top: 0; color: #22c55e;">Message:</h3>
-        <p style="white-space: pre-wrap; line-height: 1.6; color: #374151;">${message}</p>
-      </div>
-      <p style="color: #6b7280; font-size: 12px; margin-top: 30px; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 20px;">
-        Sent from GreenTensor Contact Form
-      </p>
-    </div>
-  </div>
-</body>
-</html>`,
-    });
+    try {
+      const conn = await Deno.connect({ hostname: smtpHost, port: smtpPort });
+      const encoder = new TextEncoder();
+      const decoder = new TextDecoder();
 
-    await client.close();
+      async function readResponse() {
+        const buffer = new Uint8Array(1024);
+        const n = await conn.read(buffer);
+        return decoder.decode(buffer.subarray(0, n || 0));
+      }
+
+      async function sendCommand(cmd: string) {
+        await conn.write(encoder.encode(cmd + '\r\n'));
+        return await readResponse();
+      }
+
+      // SMTP conversation
+      await readResponse(); // Welcome message
+      await sendCommand(`EHLO ${smtpHost}`);
+      await sendCommand('STARTTLS');
+      
+      // Upgrade to TLS
+      const tlsConn = await Deno.startTls(conn, { hostname: smtpHost });
+      
+      async function tlsSend(cmd: string) {
+        await tlsConn.write(encoder.encode(cmd + '\r\n'));
+        const buffer = new Uint8Array(1024);
+        const n = await tlsConn.read(buffer);
+        return decoder.decode(buffer.subarray(0, n || 0));
+      }
+
+      await tlsSend(`EHLO ${smtpHost}`);
+      await tlsSend('AUTH LOGIN');
+      await tlsSend(btoa(smtpUser));
+      await tlsSend(btoa(smtpPassword));
+      await tlsSend(`MAIL FROM:<${smtpUser}>`);
+      await tlsSend(`RCPT TO:<${smtpUser}>`);
+      await tlsSend('DATA');
+      await tlsSend(emailBody + '\r\n.');
+      await tlsSend('QUIT');
+
+      tlsConn.close();
+    } catch (smtpError: any) {
+      console.error('SMTP error:', smtpError);
+      throw new Error(`Failed to send email: ${smtpError.message || 'Unknown error'}`);
+    }
 
     console.log('Email sent successfully');
 
