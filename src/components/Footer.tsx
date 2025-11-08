@@ -60,7 +60,9 @@ const Footer = () => {
                 <Github className="w-5 h-5 text-foreground group-hover:text-background" />
               </a>
               <a 
-                href="mailto:contact.greentensor@gmail.com"
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=contact.greentensor@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-lg bg-card hover:bg-eco-green transition-colors flex items-center justify-center group"
               >
                 <Mail className="w-5 h-5 text-foreground group-hover:text-background" />
