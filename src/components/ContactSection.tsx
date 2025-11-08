@@ -48,7 +48,9 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <div className="font-medium mb-1">Email</div>
-                    <div className="text-muted-foreground">contact@greentensor.ai</div>
+                    <a href="mailto:contact.greentensor@gmmil.com" className="text-muted-foreground hover:text-eco-green transition-colors">
+                      contact.greentensor@gmmil.com
+                    </a>
                   </div>
                 </div>
 
@@ -68,7 +70,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <div className="font-medium mb-1">Location</div>
-                    <div className="text-muted-foreground">San Francisco, CA</div>
+                    <div className="text-muted-foreground">Bengaluru, Karnataka, India</div>
                   </div>
                 </div>
               </div>

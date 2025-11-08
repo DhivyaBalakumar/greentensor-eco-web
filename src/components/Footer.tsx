@@ -1,4 +1,5 @@
-import { Leaf, Twitter, Linkedin, Github } from 'lucide-react';
+import { Twitter, Linkedin, Github } from 'lucide-react';
+import logo from '@/assets/greentensor-logo.png';
 
 const Footer = () => {
   return (
@@ -8,10 +9,11 @@ const Footer = () => {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-eco-green to-tech-blue flex items-center justify-center">
-                <Leaf className="w-6 h-6 text-background" />
-              </div>
-              <span className="font-bold text-xl gradient-text">GreenTensor</span>
+              <img 
+                src={logo} 
+                alt="GreenTensor Logo" 
+                className="h-10 w-auto object-contain"
+              />
             </div>
             <p className="text-sm text-muted-foreground">
               Making AI sustainable and secure by default.
