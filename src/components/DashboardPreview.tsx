@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { TrendingDown, Shield, Activity, Leaf } from 'lucide-react';
+import { TrendingDown, Shield, Activity, Leaf, ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const DashboardPreview = () => {
   const [metrics, setMetrics] = useState({
@@ -100,6 +101,27 @@ const DashboardPreview = () => {
               <p className="text-muted-foreground">Live performance charts</p>
             </div>
           </div>
+        </div>
+
+        <div className="text-center mt-8 space-y-3">
+          <Button 
+            asChild
+            size="lg"
+            className="gradient-bg hover:opacity-90 transition-opacity"
+          >
+            <a 
+              href="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/db2944968894fa8a7cba71ddecadaf5a/aab21638-6d58-4b9c-8cfb-3800e76aad0b/index.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2"
+            >
+              View Demo
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </Button>
+          <p className="text-sm text-muted-foreground italic">
+            *Just for demo purposes
+          </p>
         </div>
       </div>
     </section>
