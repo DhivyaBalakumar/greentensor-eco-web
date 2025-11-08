@@ -77,36 +77,33 @@ serve(async (req) => {
       from: smtpUser,
       to: smtpUser, // Send to your own email
       subject: `New Contact Form Submission from ${name}`,
-      content: `
-New contact form submission:
-
-Name: ${name}
-Email: ${email}
-${company ? `Company: ${company}` : ''}
-
-Message:
-${message}
-
----
-Sent from GreenTensor Contact Form
-      `,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #22c55e;">New Contact Form Submission</h2>
-          <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-            ${company ? `<p><strong>Company:</strong> ${company}</p>` : ''}
-          </div>
-          <div style="background: #ffffff; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-            <h3 style="margin-top: 0;">Message:</h3>
-            <p style="white-space: pre-wrap;">${message}</p>
-          </div>
-          <p style="color: #6b7280; font-size: 12px; margin-top: 20px;">
-            Sent from GreenTensor Contact Form
-          </p>
-        </div>
-      `,
+      html: `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5;">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="background: linear-gradient(135deg, #22c55e 0%, #10b981 100%); padding: 30px; text-align: center;">
+      <h2 style="color: #ffffff; margin: 0;">New Contact Form Submission</h2>
+    </div>
+    <div style="padding: 30px;">
+      <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <p style="margin: 10px 0;"><strong>Name:</strong> ${name}</p>
+        <p style="margin: 10px 0;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #22c55e;">${email}</a></p>
+        ${company ? `<p style="margin: 10px 0;"><strong>Company:</strong> ${company}</p>` : ''}
+      </div>
+      <div style="background: #ffffff; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+        <h3 style="margin-top: 0; color: #22c55e;">Message:</h3>
+        <p style="white-space: pre-wrap; line-height: 1.6; color: #374151;">${message}</p>
+      </div>
+      <p style="color: #6b7280; font-size: 12px; margin-top: 30px; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 20px;">
+        Sent from GreenTensor Contact Form
+      </p>
+    </div>
+  </div>
+</body>
+</html>`,
     });
 
     await client.close();
