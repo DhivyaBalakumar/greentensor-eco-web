@@ -31,7 +31,7 @@ const Header = () => {
             <img 
               src={logo} 
               alt="GreenTensor Logo" 
-              className="h-full w-auto object-contain mix-blend-screen"
+              className="h-full w-auto object-contain"
             />
           </div>
         </div>
