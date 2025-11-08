@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
-import logo from '@/assets/greentensor-logo.png';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -27,12 +26,8 @@ const Header = () => {
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className={`transition-all duration-500 ${scrolled ? 'h-8' : 'h-12'}`}>
-            <img 
-              src={logo} 
-              alt="GreenTensor Logo" 
-              className="h-full w-auto object-contain"
-            />
+          <div className={`transition-all duration-500 ${scrolled ? 'text-3xl' : 'text-5xl'} font-bold gradient-text`}>
+            GT
           </div>
         </div>
 
