@@ -26,7 +26,10 @@ const Header = () => {
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <button 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="flex items-center gap-3 cursor-pointer"
+        >
           <div className={`transition-all duration-500 ${scrolled ? 'h-8' : 'h-12'}`}>
             <img 
               src={logo} 
@@ -34,7 +37,7 @@ const Header = () => {
               className="h-full w-auto object-contain"
             />
           </div>
-        </div>
+        </button>
 
         <nav className="hidden md:flex items-center gap-8">
           <button 
