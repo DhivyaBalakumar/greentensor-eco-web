@@ -1,4 +1,4 @@
-import { Twitter, Linkedin, Github } from 'lucide-react';
+import { Leaf, Linkedin, Github } from 'lucide-react';
 import logo from '@/assets/greentensor-logo.png';
 
 const Footer = () => {
@@ -24,9 +24,9 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Product</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-foreground transition-colors">Features</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Pricing</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Documentation</a></li>
+              <li><a href="#why" className="hover:text-foreground transition-colors">Features</a></li>
+              <li><a href="#product" className="hover:text-foreground transition-colors">Dashboard</a></li>
+              <li><a href="#vision" className="hover:text-foreground transition-colors">Vision</a></li>
             </ul>
           </div>
 
@@ -34,9 +34,8 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-foreground transition-colors">About</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Careers</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Blog</a></li>
+              <li><a href="#vision" className="hover:text-foreground transition-colors">About</a></li>
+              <li><a href="#contact" className="hover:text-foreground transition-colors">Contact</a></li>
             </ul>
           </div>
 
@@ -44,13 +43,20 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Connect</h4>
             <div className="flex gap-3">
-              <a href="#" className="w-10 h-10 rounded-lg bg-card hover:bg-eco-green transition-colors flex items-center justify-center group">
-                <Twitter className="w-5 h-5 text-foreground group-hover:text-background" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-card hover:bg-tech-blue transition-colors flex items-center justify-center group">
+              <a 
+                href="https://www.linkedin.com/in/dhivyabalakumar04" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-lg bg-card hover:bg-tech-blue transition-colors flex items-center justify-center group"
+              >
                 <Linkedin className="w-5 h-5 text-foreground group-hover:text-background" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-card hover:bg-cyber-cyan transition-colors flex items-center justify-center group">
+              <a 
+                href="https://github.com/DhivyaBalakumar" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-lg bg-card hover:bg-cyber-cyan transition-colors flex items-center justify-center group"
+              >
                 <Github className="w-5 h-5 text-foreground group-hover:text-background" />
               </a>
             </div>

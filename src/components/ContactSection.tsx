@@ -60,7 +60,9 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <div className="font-medium mb-1">Phone</div>
-                    <div className="text-muted-foreground">+1 (555) 123-4567</div>
+                    <a href="tel:+919538986492" className="text-muted-foreground hover:text-tech-blue transition-colors">
+                      +91 9538986492
+                    </a>
                   </div>
                 </div>
 
@@ -125,7 +127,7 @@ const ContactSection = () => {
                 type="submit"
                 className="w-full bg-gradient-to-r from-eco-green to-tech-blue hover:opacity-90 transition-opacity text-lg py-6"
               >
-                Send Message
+                Contact Us
               </Button>
             </form>
           </div>
