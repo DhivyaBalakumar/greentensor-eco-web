@@ -18,29 +18,39 @@ const ContactSection = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const { error } = await supabase
-      .from('contact_submissions')
-      .insert([{
-        name: formData.name,
-        email: formData.email,
-        company: formData.company || null,
-        message: formData.message,
-      }]);
+    try {
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          company: formData.company || null,
+          message: formData.message,
+        },
+      });
 
-    if (error) {
+      if (error) {
+        console.error('Error sending email:', error);
+        toast({
+          title: "Error",
+          description: "Failed to send message. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      toast({
+        title: "Message sent!",
+        description: "We'll get back to you within 24 hours.",
+      });
+      setFormData({ name: '', email: '', company: '', message: '' });
+    } catch (error) {
+      console.error('Error:', error);
       toast({
         title: "Error",
         description: "Failed to send message. Please try again.",
         variant: "destructive",
       });
-      return;
     }
-
-    toast({
-      title: "Message sent!",
-      description: "We'll get back to you within 24 hours.",
-    });
-    setFormData({ name: '', email: '', company: '', message: '' });
   };
 
   return (
