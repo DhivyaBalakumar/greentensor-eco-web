@@ -41,6 +41,33 @@ const Header = () => {
             GreenTensor
           </span>
         </button>
+
+        <nav className="hidden md:flex items-center gap-8">
+          <button 
+            onClick={() => scrollToSection('why')}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Why Us
+          </button>
+          <button 
+            onClick={() => scrollToSection('vision')}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Vision
+          </button>
+          <button 
+            onClick={() => scrollToSection('product')}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Product
+          </button>
+          <Button 
+            onClick={() => scrollToSection('contact')}
+            className="bg-gradient-to-r from-eco-green to-tech-blue hover:opacity-90 transition-opacity"
+          >
+            Contact Us
+          </Button>
+        </nav>
       </div>
     </header>
   );
