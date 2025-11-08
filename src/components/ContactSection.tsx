@@ -144,7 +144,7 @@ const ContactSection = () => {
 
               <div>
                 <Textarea
-                  placeholder="Tell us about your needs..."
+                  placeholder="How can we support your transition to secure, sustainable AI?"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   required
