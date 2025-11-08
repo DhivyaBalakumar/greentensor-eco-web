@@ -1,4 +1,4 @@
-import { Leaf, Linkedin, Github } from 'lucide-react';
+import { Leaf, Linkedin, Github, Mail } from 'lucide-react';
 import logo from '@/assets/greentensor-logo.png';
 
 const Footer = () => {
@@ -58,6 +58,12 @@ const Footer = () => {
                 className="w-10 h-10 rounded-lg bg-card hover:bg-cyber-cyan transition-colors flex items-center justify-center group"
               >
                 <Github className="w-5 h-5 text-foreground group-hover:text-background" />
+              </a>
+              <a 
+                href="mailto:contact.greentensor@gmail.com"
+                className="w-10 h-10 rounded-lg bg-card hover:bg-eco-green transition-colors flex items-center justify-center group"
+              >
+                <Mail className="w-5 h-5 text-foreground group-hover:text-background" />
               </a>
             </div>
           </div>
