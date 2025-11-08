@@ -79,6 +79,7 @@ serve(async (req) => {
     ].filter(Boolean).join('\r\n');
 
     try {
+      console.log(`Connecting to ${smtpHost}:${smtpPort}...`);
       const conn = await Deno.connect({ hostname: smtpHost, port: smtpPort });
       const encoder = new TextEncoder();
       const decoder = new TextDecoder();
@@ -86,33 +87,67 @@ serve(async (req) => {
       async function readResponse() {
         const buffer = new Uint8Array(1024);
         const n = await conn.read(buffer);
-        return decoder.decode(buffer.subarray(0, n || 0));
+        const response = decoder.decode(buffer.subarray(0, n || 0));
+        console.log('Server response:', response.trim());
+        return response;
       }
 
       async function sendCommand(cmd: string) {
+        console.log('Sending command:', cmd.replace(btoa(smtpPassword || ''), '***'));
         await conn.write(encoder.encode(cmd + '\r\n'));
         return await readResponse();
       }
 
       // SMTP conversation
-      await readResponse(); // Welcome message
-      await sendCommand(`EHLO ${smtpHost}`);
-      await sendCommand('STARTTLS');
+      const welcome = await readResponse();
+      if (!welcome.startsWith('220')) {
+        throw new Error(`Invalid welcome: ${welcome}`);
+      }
+
+      const ehlo1 = await sendCommand(`EHLO ${smtpHost}`);
+      if (!ehlo1.includes('250')) {
+        throw new Error(`EHLO failed: ${ehlo1}`);
+      }
+
+      const starttls = await sendCommand('STARTTLS');
+      if (!starttls.startsWith('220')) {
+        throw new Error(`STARTTLS failed: ${starttls}`);
+      }
       
-      // Upgrade to TLS
+      console.log('Upgrading to TLS...');
       const tlsConn = await Deno.startTls(conn, { hostname: smtpHost });
       
       async function tlsSend(cmd: string) {
+        const displayCmd = cmd.includes(btoa(smtpPassword || '')) ? '***' : cmd;
+        console.log('TLS command:', displayCmd);
         await tlsConn.write(encoder.encode(cmd + '\r\n'));
         const buffer = new Uint8Array(1024);
         const n = await tlsConn.read(buffer);
-        return decoder.decode(buffer.subarray(0, n || 0));
+        const response = decoder.decode(buffer.subarray(0, n || 0));
+        console.log('TLS response:', response.trim());
+        return response;
       }
 
-      await tlsSend(`EHLO ${smtpHost}`);
-      await tlsSend('AUTH LOGIN');
-      await tlsSend(btoa(smtpUser));
-      await tlsSend(btoa(smtpPassword));
+      const ehlo2 = await tlsSend(`EHLO ${smtpHost}`);
+      if (!ehlo2.includes('250')) {
+        throw new Error(`TLS EHLO failed: ${ehlo2}`);
+      }
+
+      const auth = await tlsSend('AUTH LOGIN');
+      if (!auth.startsWith('334')) {
+        throw new Error(`AUTH LOGIN failed: ${auth}`);
+      }
+
+      const userAuth = await tlsSend(btoa(smtpUser));
+      if (!userAuth.startsWith('334')) {
+        throw new Error(`Username auth failed: ${userAuth}`);
+      }
+
+      const passAuth = await tlsSend(btoa(smtpPassword));
+      if (!passAuth.startsWith('235')) {
+        throw new Error(`Password auth failed. If using Gmail, you need an App Password from https://myaccount.google.com/apppasswords`);
+      }
+
       await tlsSend(`MAIL FROM:<${smtpUser}>`);
       await tlsSend(`RCPT TO:<${smtpUser}>`);
       await tlsSend('DATA');
@@ -120,6 +155,7 @@ serve(async (req) => {
       await tlsSend('QUIT');
 
       tlsConn.close();
+      console.log('Email sent successfully via SMTP');
     } catch (smtpError: any) {
       console.error('SMTP error:', smtpError);
       throw new Error(`Failed to send email: ${smtpError.message || 'Unknown error'}`);
