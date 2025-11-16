@@ -61,6 +61,12 @@ const Header = () => {
           >
             Product
           </button>
+          <button 
+            onClick={() => scrollToSection('faq')}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            FAQ
+          </button>
           <Button 
             onClick={() => scrollToSection('contact')}
             className="bg-gradient-to-r from-eco-green to-tech-blue hover:opacity-90 transition-opacity"
