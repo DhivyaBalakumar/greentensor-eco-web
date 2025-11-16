@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { RotateCcw } from 'lucide-react';
 import gtLogo from '@/assets/gt-logo.png';
+import { Button } from '@/components/ui/button';
 
 const VennDiagramSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -26,6 +28,13 @@ const VennDiagramSection = () => {
     };
   }, []);
 
+  const handleReplay = () => {
+    setIsVisible(false);
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+  };
+
   return (
     <section 
       ref={sectionRef}
@@ -39,6 +48,15 @@ const VennDiagramSection = () => {
           <p className="text-muted-foreground text-lg">
             Where sustainability, security, and intelligence converge
           </p>
+          <Button
+            onClick={handleReplay}
+            variant="outline"
+            size="sm"
+            className="mt-4 gap-2"
+          >
+            <RotateCcw className="w-4 h-4" />
+            Replay Animation
+          </Button>
         </div>
 
         <div className="relative w-full h-[600px] flex items-center justify-center">
