@@ -4,7 +4,6 @@ import CustomCursor from '@/components/CustomCursor';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import WhySection from '@/components/WhySection';
-import VennDiagramSection from '@/components/VennDiagramSection';
 import VisionSection from '@/components/VisionSection';
 import DashboardPreview from '@/components/DashboardPreview';
 import FAQSection from '@/components/FAQSection';
@@ -23,7 +22,6 @@ const Index = () => {
       <main>
         <HeroSection />
         <WhySection />
-        <VennDiagramSection />
         <VisionSection />
         <DashboardPreview />
         <FAQSection />
